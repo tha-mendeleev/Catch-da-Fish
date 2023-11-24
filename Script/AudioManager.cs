@@ -10,45 +10,92 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip fishAttachedClip;
     [SerializeField] AudioClip fishingClip;
     [SerializeField] AudioClip fishEscaped;
+
+    [SerializeField] AudioSource themeMusicSoucre;
+
     public static AudioManager Instance;
 
-    private AudioSource audioSource;
+    private AudioSource soundEffectSource;
+
+    private bool _playSoundEffect = true;
+    private bool _playThemeMusic = true;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        soundEffectSource = GetComponent<AudioSource>();
         Instance = this;
+    }
+
+    private void Start()
+    {
+        soundEffectSource.gameObject.SetActive(_playSoundEffect);
+        themeMusicSoucre.gameObject.SetActive(_playThemeMusic);
     }
 
     public void PlayClip(Clip clip)
     {
+        if (!_playSoundEffect) return;
         switch (clip)
         {
             case Clip.Sink:
-                audioSource.PlayOneShot(boatSinkClip[Random.Range(0, boatSinkClip.Length)]);
+                StopThemeMusic();
+                soundEffectSource.PlayOneShot(boatSinkClip[Random.Range(0, boatSinkClip.Length)]);
                 break;
             case Clip.Buy:
-                audioSource.PlayOneShot(buyItemClips[Random.Range(0, buyItemClips.Length)]);
+                soundEffectSource.PlayOneShot(buyItemClips[Random.Range(0, buyItemClips.Length)]);
                 break;
             case Clip.Caught:
-                audioSource.PlayOneShot(caughtFishClip[Random.Range(0, caughtFishClip.Length)]);
+                soundEffectSource.PlayOneShot(caughtFishClip[Random.Range(0, caughtFishClip.Length)]);
                 break;
             case Clip.Fishing:
-                audioSource.PlayOneShot(fishingClip);
+                soundEffectSource.PlayOneShot(fishingClip);
                 break;
             case Clip.FishTouch:
                 if (fishAttachedClip)
-                    audioSource.PlayOneShot(fishAttachedClip);
+                    soundEffectSource.PlayOneShot(fishAttachedClip);
                 break;
             case Clip.Escaped:
                 if (fishEscaped)
-                    audioSource.PlayOneShot(fishEscaped);
+                    soundEffectSource.PlayOneShot(fishEscaped);
                 break;
             default: break;
         }
     }
 
+    public void SetMasterVolume(float vol)
+    {
+        soundEffectSource.volume = vol;
+        themeMusicSoucre.volume = vol;
+    }
+
+    public void PlayThemeMusic()
+    {
+        themeMusicSoucre.Play();
+    }
+
+    private void StopThemeMusic()
+    {
+        themeMusicSoucre.Stop();
+    }
+
+    public void ToggleSoundEffect(bool toggleValue)
+    {
+        _playSoundEffect = toggleValue;
+    }
+
+    public void ToggleThemeMusic(bool toggleValueTrue)
+    {
+        if (toggleValueTrue)
+        {
+            PlayThemeMusic();
+        } else
+        {
+            StopThemeMusic();
+        }
+    }
 }
+
+
 public enum Clip
 {
     Sink,

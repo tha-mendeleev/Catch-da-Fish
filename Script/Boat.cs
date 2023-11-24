@@ -145,6 +145,7 @@ public class Boat : MonoBehaviour
         transform.position = _originPos;
         GetComponentInChildren<FishingRod>().ResetDefault();
         Stop();
+        AudioManager.Instance.PlayThemeMusic();
     }
 
     public void UpgradeBoatSpeed(float upSpeed)
