@@ -12,7 +12,7 @@ public class FishingRod : MonoBehaviour
 
     private bool _fishing = false;
     private Vector3 _originPos;
-    private bool up = false;
+    private bool _up = false;
     private bool _caught = false;
     private Fish _fish;
 
@@ -25,15 +25,15 @@ public class FishingRod : MonoBehaviour
 
     private void Update()
     {
-        if (_fishing || up)
+        if (_fishing || _up)
         {
-            if (transform.localPosition.y > _originPos.y - fishingDept && !up)
+            if (transform.localPosition.y > _originPos.y - fishingDept && !_up)
             {
                 Down();
             }
             else
             {
-                up = true;
+                _up = true;
                 Up();
             }
         }
@@ -56,7 +56,7 @@ public class FishingRod : MonoBehaviour
     private void Done()
     {
         _fishing = false;
-        up = false;
+        _up = false;
         if (_caught && _fish)
         {
             GetComponentInParent<Boat>().AddFish(_fish.Weight);
@@ -81,7 +81,7 @@ public class FishingRod : MonoBehaviour
     {
         _fishing = false;
         transform.localPosition = _originPos;
-        up = false;
+        _up = false;
         _caught = false;
         _fish = null;
     }
@@ -102,7 +102,7 @@ public class FishingRod : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out ISeaItem item) && !_caught && _fishing)
         {
             _caught = true;
-            up = true;
+            _up = true;
             collision.transform.SetParent(transform);
             item.Caught(maxPower);
             if (item is Fish)

@@ -10,9 +10,13 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] Sprite[] fishSprites2;
     private float _spawnInterval = 0f;
     private float _maxSpawnInterval = 5f;
-    private static int _alive = 0;
+    private static int _alive;
     private readonly int _maxAliveFish = 40;
 
+    void Awake()
+    {
+        _alive = 0;
+    }
 
     void Update()
     {

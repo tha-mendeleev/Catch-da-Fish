@@ -11,6 +11,11 @@ public class KillerSpawner : MonoBehaviour
     private readonly float _bottomMostY = -5.7f, _upMostY = 1.3f;
     private float _spawnInterval = 0f, _maxSpawnInterval = 6f;
 
+    private void Awake()
+    {
+        _aliveBomb = 0;
+    }
+
     private void Update()
     {
         if (_aliveBomb < _maxAliveBomp)

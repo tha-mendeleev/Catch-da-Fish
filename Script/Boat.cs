@@ -5,7 +5,7 @@ public class Boat : MonoBehaviour
 {
     [SerializeField] float capacity = 10f;
     [SerializeField] float speed = 1f;
-    [SerializeField] TextMeshProUGUI fuelText, scaleText, capacityText;
+    [SerializeField] TextMeshProUGUI fuelText, scaleText, capacityText, highScoreText;
     public bool Sink = false;
     public static Boat Instance;
 
@@ -17,6 +17,7 @@ public class Boat : MonoBehaviour
     private float _sinkInterval = 0, _maxSinkInterval = 1.5f;
     private bool _sinking = false;
     private int _viewScreenSize = 20;
+    private float _highScore = 0f;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class Boat : MonoBehaviour
         fuelText.text = $"Fuel: {fuel:0.00} L";
         scaleText.text = $"Weight: {_currentWeight:0.00} Kg";
         capacityText.text = $"Capacity: {capacity:0.00} Kg";
+        highScoreText.text = $"Caught total: {_highScore:0.00} Kg";
         Instance = this;
     }
 
@@ -51,7 +53,8 @@ public class Boat : MonoBehaviour
                 Stop();
             }
 
-        } else
+        }
+        else
         {
             if (fuel >= 20) return;
             fuel += .25f * Time.deltaTime;
@@ -61,7 +64,8 @@ public class Boat : MonoBehaviour
 
     private void ClampPostion()
     {
-        if (transform.position.x + .5f * _movement.Direction < -_viewScreenSize || transform.position.x + .5f * _movement.Direction > _viewScreenSize)
+        if (transform.position.x + .5f * _movement.Direction < -_viewScreenSize
+            || transform.position.x + .5f * _movement.Direction > _viewScreenSize)
         {
 
             Stop();
@@ -92,6 +96,8 @@ public class Boat : MonoBehaviour
     public void AddFish(float weight)
     {
         _currentWeight += weight;
+        _highScore += weight;
+        highScoreText.text = $"Caught total: {_highScore:0.00} Kg";
 
         if (_currentWeight > capacity)
         {
@@ -104,6 +110,7 @@ public class Boat : MonoBehaviour
         {
             scaleText.text = $"Weight: {_currentWeight:0.00} Kg";
         }
+
     }
 
     private void SinkBoat()
@@ -122,11 +129,11 @@ public class Boat : MonoBehaviour
         else
         {
             _sinkInterval = 0;
-            Response();
+            Respawn();
         }
     }
 
-    public void Response()
+    public void Respawn()
     {
         Sink = false;
         _sinking = false;
@@ -140,11 +147,13 @@ public class Boat : MonoBehaviour
         Stop();
     }
 
-    public void UpgradeBoatSpeed(float upSpeed) {
+    public void UpgradeBoatSpeed(float upSpeed)
+    {
         speed += upSpeed;
     }
 
-    public void UpgradeBoatCapacity(float upCapacity) {
+    public void UpgradeBoatCapacity(float upCapacity)
+    {
         capacity += upCapacity;
         capacityText.text = $"Capacity: {capacity:0.00} Kg";
     }
