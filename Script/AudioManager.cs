@@ -18,19 +18,12 @@ public class AudioManager : MonoBehaviour
     private AudioSource soundEffectSource;
 
     private bool _playSoundEffect = true;
-    private bool _playThemeMusic = true;
-
     private void Awake()
     {
         soundEffectSource = GetComponent<AudioSource>();
         Instance = this;
     }
 
-    private void Start()
-    {
-        soundEffectSource.gameObject.SetActive(_playSoundEffect);
-        themeMusicSoucre.gameObject.SetActive(_playThemeMusic);
-    }
 
     public void PlayClip(Clip clip)
     {
@@ -65,7 +58,7 @@ public class AudioManager : MonoBehaviour
     public void SetMasterVolume(float vol)
     {
         soundEffectSource.volume = vol;
-        themeMusicSoucre.volume = vol;
+        themeMusicSoucre.volume = vol * .75f;
     }
 
     public void PlayThemeMusic()
